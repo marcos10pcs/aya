@@ -1,0 +1,30 @@
+{
+    "trailingComma": "none",
+    "tabWidth": 4,
+    "useTabs": false,
+    "printWidth": 10000,
+    "bracketSpacing": true,
+    "endOfLine": "lf",
+    "singleAttributePerLine": false,
+    "overrides": [
+        {
+            "files": "*.js",
+            "options": {
+                "semi": false
+            }
+        },
+        {
+            "files": "*.svelte",
+            "options": {
+                "parser": "svelte",
+                "semi": false,
+                "bracketSpacing": true
+            }
+        }
+    ],
+    "insertFinalNewline": false,
+    "plugins": [
+        "prettier-plugin-svelte",
+        "prettier-plugin-tailwindcss"
+    ]
+}

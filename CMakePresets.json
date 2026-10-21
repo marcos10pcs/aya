@@ -1,0 +1,127 @@
+{
+  "version": 8,
+  "configurePresets": [
+    {
+      "name": "x64-linux-dbg",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_PREFIX_PATH": "/Users/wolf/Qt/6.9.1/macos",
+        "Qt6_DIR": "/Users/wolf/Qt/6.9.1/macos/lib/cmake/Qt6",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "x64-linux-rel",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_PREFIX_PATH": "/Users/wolf/Qt/6.9.1/macos",
+        "Qt6_DIR": "/Users/wolf/Qt/6.9.1/macos/lib/cmake/Qt6",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "x64-linux-ci",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_PREFIX_PATH": "/Users/wolf/Qt/6.9.1/macos",
+        "Qt6_DIR": "/Users/wolf/Qt/6.9.1/macos/lib/cmake/Qt6",
+        "CMAKE_BUILD_TYPE": "MinSizeRel",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_C_COMPILER_LAUNCHER": "sccache",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
+        "CI": true
+      }
+    },
+    {
+      "name": "x64-windows-dbg",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "clang-cl",
+        "CMAKE_CXX_COMPILER": "clang-cl"
+      }
+    },
+    {
+      "name": "x64-windows-rel",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "clang-cl",
+        "CMAKE_CXX_COMPILER": "clang-cl",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "x64-windows-emi",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_C_COMPILER": "clang-cl",
+        "CMAKE_CXX_COMPILER": "clang-cl",
+        "CMAKE_PREFIX_PATH": "d:/Qt/6.7.0/msvc2019_64"
+      }
+    },
+    {
+      "name": "x64-windows-ci",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_BUILD_TYPE": "MinSizeRel",
+        "CMAKE_C_COMPILER": "clang-cl",
+        "CMAKE_CXX_COMPILER": "clang-cl",
+        "CMAKE_C_COMPILER_LAUNCHER": "C:/Program Files/Mozilla/sccache.exe",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "C:/Program Files/Mozilla/sccache.exe",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+        "VCPKG_LIBRARY_LINKAGE": "static",
+        "CMAKE_PREFIX_PATH": "C:/Qt/6.7.3/msvc2019_64",
+        "ATL_PATH": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.40.34120/atlmfc",
+        "CI": true
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x64-linux-dbg",
+      "configurePreset": "x64-linux-dbg"
+    },
+    {
+      "name": "x64-linux-rel",
+      "configurePreset": "x64-linux-rel"
+    },
+    {
+      "name": "x64-linux-ci",
+      "configurePreset": "x64-linux-ci"
+    },
+    {
+      "name": "x64-windows-dbg",
+      "configurePreset": "x64-windows-dbg"
+    },
+    {
+      "name": "x64-windows-rel",
+      "configurePreset": "x64-windows-rel"
+    },
+    {
+      "name": "x64-windows-emi",
+      "configurePreset": "x64-windows-emi"
+    },
+    {
+      "name": "x64-windows-ci",
+      "configurePreset": "x64-windows-ci"
+    }
+  ]
+}

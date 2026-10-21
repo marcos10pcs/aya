@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aya Studio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
+        body {
+            margin: 0;
+            background-color: #fff;
+            color: #1f1f1f;
+            font-family: "Source Sans 3", sans-serif;
+            border: 1px solid #b6b6b6;
+            box-sizing: border-box;
+            height: 100vh;
+            padding: 3rem;
+        }
+
+        * { margin: 0 }
+        a { color: #8540f5; }
+    </style>
+</head>
+
+<body>
+    <div style="display: flex; align-items: center;">
+        <img src="./textures/Aya.png" width="75">
+        <div style="display: flex; flex-direction: column; margin-left: .75rem; ">
+            <h1 style="font-weight: 600;">Aya Studio</h1>
+            <code>v1.0.4-alpha</code>
+        </div>
+    </div>
+
+    <h3 style="margin-bottom: .25rem; margin-top: 1rem; font-weight: 500">Recent Files:</h3>
+    <ul id="files"></ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let parameters = new URLSearchParams(window.location.search)
+            let entries = Array.from(parameters.entries())
+
+            if (entries.length % 2 !== 0) {
+                return
+            }
+
+            for (let i = 0; i < entries.length; i += 2) {
+                let filepath = entries[i][1]
+                let filename = entries[i + 1][1]
+
+                let li = document.createElement("li")
+                let a = document.createElement("a")
+                a.href = `#${filepath}`
+                a.textContent = filename
+                li.appendChild(a)
+                document.getElementById("files").appendChild(li)
+            }
+        })
+    </script>
+</body>
+
+</html>

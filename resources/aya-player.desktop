@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Aya
+Comment=a very cool software
+Exec=Aya.Studio
+GenericName=Aya
+Categories=Game
+Terminal=true
+Icon=aya-64x64

@@ -1,0 +1,104 @@
+name: Build
+on: push
+
+jobs:
+  linux:
+    name: Linux
+    runs-on: [self-hosted, builder, Linux]
+
+    env:
+      CMAKE_CXX_COMPILER: clang++
+      CMAKE_C_COMPILER: clang
+      VCPKG_TARGET_TRIPLET: x64-linux
+      VCPKG_BINARY_SOURCES: clear;x-gha,readwrite
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+        
+      - name: Set up vcpkg
+        uses: lukka/run-vcpkg@v11
+
+      - name: Build (Ninja)
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: x64-linux-ci
+          buildPreset: x64-linux-ci
+
+      - name: Pack build artifacts (UPX)
+        uses: crazy-max/ghaction-upx@v3
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        with:
+          version: latest
+          args: -9 -qf
+          files: |
+            ${{ github.workspace }}/build/x64-linux-ci/bin/Aya.Player
+            ${{ github.workspace }}/build/x64-linux-ci/bin/Aya.Server
+            ${{ github.workspace }}/build/x64-linux-ci/bin/Aya.Studio
+            ${{ github.workspace }}/build/x64-linux-ci/bin/Aya.WebHelper
+          
+      - name: Upload build artifacts to release
+        uses: xresloader/upload-to-github-release@v1
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "${{ github.workspace }}/build/x64-linux-ci/bin/Aya.Player;${{ github.workspace }}/build/x64-linux-ci/bin/Aya.Server;${{ github.workspace }}/build/x64-linux-ci/bin/Aya.Studio;${{ github.workspace }}/build/x64-linux-ci/bin/Aya.WebHelper"
+          tags: true
+          update_latest_release: true
+
+  windows:
+    name: Windows
+    runs-on: [self-hosted, builder, Windows]
+
+    env:
+      CMAKE_CXX_COMPILER: clang-cl
+      CMAKE_C_COMPILER: clang-cl
+      VCPKG_TARGET_TRIPLET: x64-windows-static-md
+      VCPKG_LIBRARY_LINKAGE: static
+      VCPKG_BINARY_SOURCES: clear;x-gha,readwrite
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+        
+      - name: Set up vcpkg
+        uses: lukka/run-vcpkg@v11
+
+      - name: Build (Ninja)
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: x64-windows-ci
+          buildPreset: x64-windows-ci
+
+      - name: Pack build artifacts (UPX)
+        uses: crazy-max/ghaction-upx@v3
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        with:
+          version: latest
+          args: -9 -qf
+          files: |
+            ${{ github.workspace }}/build/x64-windows-ci/bin/Aya.Player.exe
+            ${{ github.workspace }}/build/x64-windows-ci/bin/Aya.Server.exe
+            ${{ github.workspace }}/build/x64-windows-ci/bin/Aya.Studio.exe
+            ${{ github.workspace }}/build/x64-windows-ci/bin/Aya.WebHelper.exe
+
+      - name: Upload build artifacts to release
+        uses: xresloader/upload-to-github-release@v1
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "${{ github.workspace }}/build/x64-windows-ci/bin/Aya.Player.exe;${{ github.workspace }}/build/x64-windows-ci/bin/Aya.Server.exe;${{ github.workspace }}/build/x64-windows-ci/bin/Aya.Studio.exe;${{ github.workspace }}/build/x64-windows-ci/bin/Aya.WebHelper.exe"
+          tags: true
+          update_latest_release: true
