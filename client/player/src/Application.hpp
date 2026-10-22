@@ -6,7 +6,6 @@
 #include "boost/scoped_ptr.hpp"
 #include "View.hpp"
 #include "Document.hpp"
-#include "SharedLauncher.hpp"
 #include "GameVerbs.hpp"
 
 #include "boost/program_options.hpp"

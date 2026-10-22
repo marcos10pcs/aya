@@ -1,7 +1,10 @@
 add_executable(Server
-# src/main.cpp
-# src/server.cpp
+  src/main.cpp
+  src/server.cpp
   src/DummyWindow.cpp
+  src/stdsoap2.cpp
+  src/generated/soapC.cpp
+  src/generated/soapRCCServiceSoapService.cpp
   src/ThumbnailGenerator.cpp
   src/DummyWindow.hpp
   src/ThumbnailGenerator.hpp
@@ -56,11 +59,21 @@ elseif(AYA_OS_LINUX OR AYA_OS_MACOS)
   target_sources(Server PRIVATE ${CMAKE_SOURCE_DIR}/engine/gfx/src/GL/ContextGLSDL2.cpp)
 endif()
 
-target_include_directories(Server PRIVATE src resources)
+target_include_directories(Server PRIVATE
+  src
+  resources
+  ${CMAKE_SOURCE_DIR}/engine/app/src
+  ${CMAKE_SOURCE_DIR}/engine/core/src
+  ${CMAKE_SOURCE_DIR}/engine/gfx/src
+  ${CMAKE_SOURCE_DIR}/engine/network/src
+)
+
+target_compile_definitions(Server PRIVATE VERSION_MAJOR_MINOR_PATCH_STR=\"1.0.0\" VERSION_FULL_STR=\"1.0.0.0\")
+set_source_files_properties(src/stdsoap2.cpp src/generated/soapC.cpp src/generated/soapRCCServiceSoapService.cpp PROPERTIES COMPILE_FLAGS "-std=gnu++14 -D_GNU_SOURCE")
 set_target_properties(Server PROPERTIES OUTPUT_NAME "Aya.Server")
 add_custom_command(TARGET Server POST_BUILD
   COMMENT "Copying test Lua script for Aya Server"
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    resources/test.lua
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources/test.lua
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )

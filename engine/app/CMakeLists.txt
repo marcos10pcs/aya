@@ -1270,9 +1270,9 @@ set(SOURCES
 
 #################################################### End Sources  ####################################################
 
-target_include_directories(AppPlayer PUBLIC ${CMAKE_SOURCE_DIR}/engine/app ${CMAKE_SOURCE_DIR}/engine/core/src ${CMAKE_SOURCE_DIR}/engine/network/src PRIVATE ${CMAKE_SOURCE_DIR}/engine/gfx/src)
-target_include_directories(AppStudio PUBLIC ${CMAKE_SOURCE_DIR}/engine/app ${CMAKE_SOURCE_DIR}/engine/core/src ${CMAKE_SOURCE_DIR}/engine/network/src PRIVATE ${CMAKE_SOURCE_DIR}/engine/gfx/src)
-target_include_directories(AppServer PUBLIC ${CMAKE_SOURCE_DIR}/engine/app ${CMAKE_SOURCE_DIR}/engine/core/src ${CMAKE_SOURCE_DIR}/engine/network/src PRIVATE ${CMAKE_SOURCE_DIR}/engine/gfx/src)
+target_include_directories(AppPlayer PUBLIC ${CMAKE_SOURCE_DIR}/engine/app/src ${CMAKE_SOURCE_DIR}/engine/core/src ${CMAKE_SOURCE_DIR}/engine/network/src PRIVATE ${CMAKE_SOURCE_DIR}/engine/gfx/src)
+target_include_directories(AppStudio PUBLIC ${CMAKE_SOURCE_DIR}/engine/app/src ${CMAKE_SOURCE_DIR}/engine/core/src ${CMAKE_SOURCE_DIR}/engine/network/src PRIVATE ${CMAKE_SOURCE_DIR}/engine/gfx/src)
+target_include_directories(AppServer PUBLIC ${CMAKE_SOURCE_DIR}/engine/app/src ${CMAKE_SOURCE_DIR}/engine/core/src ${CMAKE_SOURCE_DIR}/engine/network/src PRIVATE ${CMAKE_SOURCE_DIR}/engine/gfx/src)
 
 set(PRECOMPILED_HEADERS
   src/DataModel/DataModel.hpp
@@ -1324,7 +1324,12 @@ if(AYA_OS_LINUX OR AYA_OS_MACOS OR AYA_OS_ANDROID)
   list(APPEND SOURCES src/Utility/FileSystemIndependent.cpp)
 
   if(NOT AYA_OS_ANDROID)
-    list(APPEND SOURCES src/Utility/Linux/ProgramMemoryChecker.cpp)
+    list(APPEND SOURCES
+      src/Utility/Linux/FileSystem.cpp
+      src/Utility/Linux/MachineIdUploader.cpp
+      src/Utility/Linux/MemoryStats.cpp
+      src/Utility/Linux/ProgramMemoryChecker.cpp
+    )
   else()
     list(APPEND SOURCES
       src/Utility/Android/FileSystem.cpp
@@ -1361,14 +1366,16 @@ if(ENABLE_CHROMIUM_FRAMES)
     src/Utility/CefIntegration.hpp
   )
 
-  target_link_libraries(AppPlayer PUBLIC cefdll_wrapper)
-  target_link_libraries(AppStudio PUBLIC cefdll_wrapper)
-  target_link_libraries(AppServer PUBLIC cefdll_wrapper)
+  target_link_libraries(AppPlayer cefdll_wrapper)
+  target_link_libraries(AppStudio cefdll_wrapper)
+  target_link_libraries(AppServer cefdll_wrapper)
 endif()
 
 # Player
 if(ENABLE_DISCORD_INTEGRATION)
-  list(APPEND SOURCES
+  # DiscordIntegration is only used from AYA_PLAYER code, so it must not be
+  # compiled into the studio/server flavours of the engine.
+  target_sources(AppPlayer PRIVATE
     src/Utility/DiscordIntegration.cpp
     src/Utility/DiscordIntegration.hpp
   )

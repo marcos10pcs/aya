@@ -7,8 +7,8 @@
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
-        "CMAKE_PREFIX_PATH": "/Users/wolf/Qt/6.9.1/macos",
-        "Qt6_DIR": "/Users/wolf/Qt/6.9.1/macos/lib/cmake/Qt6",
+        "CMAKE_PREFIX_PATH": "/home/admin/Qt/6.8.3/gcc_64",
+        "Qt6_DIR": "/home/admin/Qt/6.8.3/gcc_64/lib/cmake/Qt6",
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++"
@@ -20,8 +20,8 @@
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
-        "CMAKE_PREFIX_PATH": "/Users/wolf/Qt/6.9.1/macos",
-        "Qt6_DIR": "/Users/wolf/Qt/6.9.1/macos/lib/cmake/Qt6",
+        "CMAKE_PREFIX_PATH": "/home/admin/Qt/6.8.3/gcc_64",
+        "Qt6_DIR": "/home/admin/Qt/6.8.3/gcc_64/lib/cmake/Qt6",
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++"
@@ -33,8 +33,8 @@
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
-        "CMAKE_PREFIX_PATH": "/Users/wolf/Qt/6.9.1/macos",
-        "Qt6_DIR": "/Users/wolf/Qt/6.9.1/macos/lib/cmake/Qt6",
+        "CMAKE_PREFIX_PATH": "/home/admin/Qt/6.8.3/gcc_64",
+        "Qt6_DIR": "/home/admin/Qt/6.8.3/gcc_64/lib/cmake/Qt6",
         "CMAKE_BUILD_TYPE": "MinSizeRel",
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++",

@@ -2,10 +2,11 @@ build
 build-release
 .cache
 third-party/libcef/**
+third-party/cef/**
 player-client
 client/resources/content/test.rbxl
 client/player/app/dist
-
+gSOAP/** 
 .\#*
 \#*\#
 *\~

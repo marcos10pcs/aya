@@ -1,6 +1,4 @@
 #include "DataModel/GameBasicSettings.hpp"
-#include "SharedLauncher.hpp"
-
 
 #include "Document.hpp"
 #include "FunctionMarshaller.hpp"

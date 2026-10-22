@@ -1,0 +1,10 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "permission": {
+    "*": "allow",
+    "bash": "allow",
+    "read": "allow",
+    "edit": "allow"
+  }
+}
+

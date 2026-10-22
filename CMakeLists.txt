@@ -261,6 +261,19 @@ add_subdirectory(third-party/RakNet)
 
 include_directories(${CMAKE_SOURCE_DIR}/client/core)
 
+# The engine pieces are consumed through $<TARGET_OBJECTS:...>, which does not
+# carry over the usage requirements of the object libraries. Share the include
+# paths globally instead.
+include_directories(
+  ${CMAKE_SOURCE_DIR}/engine/app/src
+  ${CMAKE_SOURCE_DIR}/engine/core/src
+  ${CMAKE_SOURCE_DIR}/engine/gfx/src
+  ${CMAKE_SOURCE_DIR}/engine/network/src
+  ${CMAKE_SOURCE_DIR}/third-party/RakNet/src
+  ${CMAKE_SOURCE_DIR}/third-party/BulletPhysics/src
+  ${CMAKE_SOURCE_DIR}/third-party/BulletPhysics/src/BulletCollision
+)
+
 if(AYA_OS_WINDOWS)
   include_directories(${CMAKE_SOURCE_DIR}/client/core/windows)
 elseif(AYA_OS_LINUX)
@@ -369,7 +382,7 @@ if(NOT NO_QT)
     Qt6::Xml
   )
 
-  target_link_libraries(Player ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES} ${CEF_LIBRARIES} ${DISCORD_RPC_LIBRARY})
+  target_link_libraries(Player ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES} ${CEF_LIBRARIES} ${QT_LIBRARIES} ${DISCORD_RPC_LIBRARY})
   target_link_libraries(Studio ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES} ${CEF_LIBRARIES} ${QT_LIBRARIES})
 
   set_property(INSTALL "$<TARGET_FILE_NAME:Player>"
@@ -392,6 +405,7 @@ target_link_libraries(Server ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES})
 set_property(INSTALL "$<TARGET_FILE_NAME:Server>"
   PROPERTY CPACK_START_MENU_SHORTCUTS "Aya Server"
 )
+
 message(NOTICE "")
 message(NOTICE "-- To compile CoreScripts for Player, run target 'CompileCoreScripts'")
 message(NOTICE "-- To compile shaders, run target 'CompileShaders'")

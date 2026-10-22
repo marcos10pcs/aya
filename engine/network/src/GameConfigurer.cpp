@@ -19,7 +19,9 @@
 
 #include "DataModel/InsertService.hpp"
 
+#if !defined(__linux) && !defined(__APPLE__)
 #include "SharedLauncher.hpp"
+#endif
 
 #include "DataModel/SocialService.hpp"
 

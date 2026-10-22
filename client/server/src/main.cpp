@@ -258,7 +258,7 @@ static void handleScriptCommand(std::string& execCommand)
     execute.jobID = "Test";
 
     RCCServiceSoapService* copy = service.copy();
-    copy->Execute(&execute, response);
+    copy->Execute(&execute, &response);
 }
 
 static void escapeLuaString(std::string& string)
@@ -500,7 +500,7 @@ int main(int argc, const char* argv[])
             openJob.script = &se;
             openJob.job = &job;
 
-            copy->OpenJob(&openJob, response);
+            copy->OpenJob(&openJob, &response);
         }
 
         std::thread heartbeat(

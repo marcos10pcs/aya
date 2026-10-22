@@ -1632,86 +1632,86 @@ double CWebService::JobItem::secondsToTimeout() const
 }
 
 
-int RCCServiceSoapService::HelloWorld(_ns1__HelloWorld* ns1__HelloWorld, _ns1__HelloWorldResponse& ns1__HelloWorldResponse)
+int RCCServiceSoapService::HelloWorld(_ns1__HelloWorld* ns1__HelloWorld, _ns1__HelloWorldResponse* ns1__HelloWorldResponse)
 {
     BEGIN_PRINT(HelloWorld, "HelloWorld");
 
-    ns1__HelloWorldResponse.HelloWorldResult = soap_new_std__string(this, -1);
-    *ns1__HelloWorldResponse.HelloWorldResult = "Hello World";
+    ns1__HelloWorldResponse->HelloWorldResult = soap_new_std__string(this, -1);
+    *ns1__HelloWorldResponse->HelloWorldResult = "Hello World";
     END_PRINT(HelloWorld, "HelloWorld");
     return 0;
 }
 
-int RCCServiceSoapService::Diag(_ns1__Diag* ns1__Diag, _ns1__DiagResponse& ns1__DiagResponse)
+int RCCServiceSoapService::Diag(_ns1__Diag* ns1__Diag, _ns1__DiagResponse* ns1__DiagResponse)
 {
     BEGIN_PRINT(Diag, "Diag");
 
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    CWebService::singleton->diag(ns1__Diag->type, *ns1__Diag->jobID, &ns1__DiagResponse.DiagResult, this);
+    CWebService::singleton->diag(ns1__Diag->type, *ns1__Diag->jobID, &ns1__DiagResponse->DiagResult, this);
 
     END_PRINT(Diag, "Diag");
     return 0;
 }
-int RCCServiceSoapService::DiagEx(_ns1__DiagEx* ns1__DiagEx, _ns1__DiagExResponse& ns1__DiagExResponse)
+int RCCServiceSoapService::DiagEx(_ns1__DiagEx* ns1__DiagEx, _ns1__DiagExResponse* ns1__DiagExResponse)
 {
     BEGIN_PRINT(DiagEx, "DiagEx");
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    ns1__DiagExResponse.DiagExResult = soap_new_ns1__ArrayOfLuaValue(this, -1);
-    CWebService::singleton->diag(ns1__DiagEx->type, *ns1__DiagEx->jobID, &ns1__DiagExResponse.DiagExResult->LuaValue, this);
+    ns1__DiagExResponse->DiagExResult = soap_new_ns1__ArrayOfLuaValue(this, -1);
+    CWebService::singleton->diag(ns1__DiagEx->type, *ns1__DiagEx->jobID, &ns1__DiagExResponse->DiagExResult->LuaValue, this);
     END_PRINT(DiagEx, "DiagEx");
     return 0;
 }
 
-int RCCServiceSoapService::GetVersion(_ns1__GetVersion* ns1__GetVersion, _ns1__GetVersionResponse& ns1__GetVersionResponse)
+int RCCServiceSoapService::GetVersion(_ns1__GetVersion* ns1__GetVersion, _ns1__GetVersionResponse* ns1__GetVersionResponse)
 {
     BEGIN_PRINT(GetVersion, "GetVersion");
-    ns1__GetVersionResponse.GetVersionResult = Aya::DebugSettings::robloxVersion.c_str();
+    ns1__GetVersionResponse->GetVersionResult = Aya::DebugSettings::robloxVersion.c_str();
     END_PRINT(GetVersion, "GetVersion");
     return 0;
 }
 
-int RCCServiceSoapService::GetStatus(_ns1__GetStatus* ns1__GetStatus, _ns1__GetStatusResponse& ns1__GetStatusResponse)
+int RCCServiceSoapService::GetStatus(_ns1__GetStatus* ns1__GetStatus, _ns1__GetStatusResponse* ns1__GetStatusResponse)
 {
     BEGIN_PRINT(GetStatus, "GetStatus");
 
-    ns1__GetStatusResponse.GetStatusResult = soap_new_ns1__Status(this, -1);
-    ns1__GetStatusResponse.GetStatusResult->version = soap_new_std__string(this, -1);
-    *ns1__GetStatusResponse.GetStatusResult->version = Aya::DebugSettings::robloxVersion.c_str();
-    ns1__GetStatusResponse.GetStatusResult->environmentCount = CWebService::singleton->jobCount();
+    ns1__GetStatusResponse->GetStatusResult = soap_new_ns1__Status(this, -1);
+    ns1__GetStatusResponse->GetStatusResult->version = soap_new_std__string(this, -1);
+    *ns1__GetStatusResponse->GetStatusResult->version = Aya::DebugSettings::robloxVersion.c_str();
+    ns1__GetStatusResponse->GetStatusResult->environmentCount = CWebService::singleton->jobCount();
     END_PRINT(GetStatus, "GetStatus");
     return 0;
 }
 
-int RCCServiceSoapService::OpenJob(_ns1__OpenJob* ns1__OpenJob, _ns1__OpenJobResponse& ns1__OpenJobResponse)
+int RCCServiceSoapService::OpenJob(_ns1__OpenJob* ns1__OpenJob, _ns1__OpenJobResponse* ns1__OpenJobResponse)
 {
     BEGIN_PRINT(OpenJob, "OpenJob");
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    CWebService::singleton->openJob(*ns1__OpenJob->job, ns1__OpenJob->script, &ns1__OpenJobResponse.OpenJobResult, this, true);
+    CWebService::singleton->openJob(*ns1__OpenJob->job, ns1__OpenJob->script, &ns1__OpenJobResponse->OpenJobResult, this, true);
     END_PRINT(OpenJob, "OpenJob");
 
     return 0;
 }
 
-int RCCServiceSoapService::OpenJobEx(_ns1__OpenJobEx* ns1__OpenJobEx, _ns1__OpenJobExResponse& ns1__OpenJobExResponse)
+int RCCServiceSoapService::OpenJobEx(_ns1__OpenJobEx* ns1__OpenJobEx, _ns1__OpenJobExResponse* ns1__OpenJobExResponse)
 {
     BEGIN_PRINT(OpenJobEx, "OpenJobEx");
 
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    ns1__OpenJobExResponse.OpenJobExResult = soap_new_ns1__ArrayOfLuaValue(this, -1);
-    CWebService::singleton->openJob(*ns1__OpenJobEx->job, ns1__OpenJobEx->script, &ns1__OpenJobExResponse.OpenJobExResult->LuaValue, this, true);
+    ns1__OpenJobExResponse->OpenJobExResult = soap_new_ns1__ArrayOfLuaValue(this, -1);
+    CWebService::singleton->openJob(*ns1__OpenJobEx->job, ns1__OpenJobEx->script, &ns1__OpenJobExResponse->OpenJobExResult->LuaValue, this, true);
 
     END_PRINT(OpenJobEx, "OpenJobEx");
     return 0;
 }
 
-int RCCServiceSoapService::Execute(_ns1__Execute* ns1__Execute, _ns1__ExecuteResponse& ns1__ExecuteResponse)
+int RCCServiceSoapService::Execute(_ns1__Execute* ns1__Execute, _ns1__ExecuteResponse* ns1__ExecuteResponse)
 {
     BEGIN_PRINT(Execute, "Execute");
 
     try
     {
         Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-        CWebService::singleton->execute(ns1__Execute->jobID, ns1__Execute->script, &ns1__ExecuteResponse.ExecuteResult, this);
+        CWebService::singleton->execute(ns1__Execute->jobID, ns1__Execute->script, &ns1__ExecuteResponse->ExecuteResult, this);
     }
     catch (std::exception&)
     {
@@ -1721,15 +1721,15 @@ int RCCServiceSoapService::Execute(_ns1__Execute* ns1__Execute, _ns1__ExecuteRes
     return 0;
 }
 
-int RCCServiceSoapService::ExecuteEx(_ns1__ExecuteEx* ns1__ExecuteEx, _ns1__ExecuteExResponse& ns1__ExecuteExResponse)
+int RCCServiceSoapService::ExecuteEx(_ns1__ExecuteEx* ns1__ExecuteEx, _ns1__ExecuteExResponse* ns1__ExecuteExResponse)
 {
     BEGIN_PRINT(ExecuteEx, "ExecuteEx");
 
     try
     {
         Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-        ns1__ExecuteExResponse.ExecuteExResult = soap_new_ns1__ArrayOfLuaValue(this, -1);
-        CWebService::singleton->execute(ns1__ExecuteEx->jobID, ns1__ExecuteEx->script, &ns1__ExecuteExResponse.ExecuteExResult->LuaValue, this);
+        ns1__ExecuteExResponse->ExecuteExResult = soap_new_ns1__ArrayOfLuaValue(this, -1);
+        CWebService::singleton->execute(ns1__ExecuteEx->jobID, ns1__ExecuteEx->script, &ns1__ExecuteExResponse->ExecuteExResult->LuaValue, this);
     }
     catch (std::exception&)
     {
@@ -1742,7 +1742,7 @@ int RCCServiceSoapService::ExecuteEx(_ns1__ExecuteEx* ns1__ExecuteEx, _ns1__Exec
 }
 
 
-int RCCServiceSoapService::CloseJob(_ns1__CloseJob* ns1__CloseJob, _ns1__CloseJobResponse& ns1__CloseJobResponse)
+int RCCServiceSoapService::CloseJob(_ns1__CloseJob* ns1__CloseJob, _ns1__CloseJobResponse* ns1__CloseJobResponse)
 {
     BEGIN_PRINT(CloseJob, "CloseJob");
     try
@@ -1758,7 +1758,7 @@ int RCCServiceSoapService::CloseJob(_ns1__CloseJob* ns1__CloseJob, _ns1__CloseJo
     return 0;
 }
 
-int RCCServiceSoapService::RenewLease(_ns1__RenewLease* ns1__RenewLease, _ns1__RenewLeaseResponse& ns1__RenewLeaseResponse)
+int RCCServiceSoapService::RenewLease(_ns1__RenewLease* ns1__RenewLease, _ns1__RenewLeaseResponse* ns1__RenewLeaseResponse)
 {
     BEGIN_PRINT(RenewLease, "RenewLease");
 
@@ -1775,7 +1775,7 @@ int RCCServiceSoapService::RenewLease(_ns1__RenewLease* ns1__RenewLease, _ns1__R
     return 0;
 }
 
-int RCCServiceSoapService::BatchJob(_ns1__BatchJob* ns1__BatchJob, _ns1__BatchJobResponse& ns1__BatchJobResponse)
+int RCCServiceSoapService::BatchJob(_ns1__BatchJob* ns1__BatchJob, _ns1__BatchJobResponse* ns1__BatchJobResponse)
 {
     BEGIN_PRINT(BatchJob, "BatchJob");
 
@@ -1783,7 +1783,7 @@ int RCCServiceSoapService::BatchJob(_ns1__BatchJob* ns1__BatchJob, _ns1__BatchJo
     // Batch jobs are completed synchronously, so there is no need to start the heartbeat
     try
     {
-        CWebService::singleton->batchJob(*ns1__BatchJob->job, ns1__BatchJob->script, &ns1__BatchJobResponse.BatchJobResult, this);
+        CWebService::singleton->batchJob(*ns1__BatchJob->job, ns1__BatchJob->script, &ns1__BatchJobResponse->BatchJobResult, this);
     }
     catch (std::exception&)
     {
@@ -1795,16 +1795,16 @@ int RCCServiceSoapService::BatchJob(_ns1__BatchJob* ns1__BatchJob, _ns1__BatchJo
 }
 
 
-int RCCServiceSoapService::BatchJobEx(_ns1__BatchJobEx* ns1__BatchJobEx, _ns1__BatchJobExResponse& ns1__BatchJobExResponse)
+int RCCServiceSoapService::BatchJobEx(_ns1__BatchJobEx* ns1__BatchJobEx, _ns1__BatchJobExResponse* ns1__BatchJobExResponse)
 {
     BEGIN_PRINT(BatchJobEx, "BatchJobEx");
 
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    ns1__BatchJobExResponse.BatchJobExResult = soap_new_ns1__ArrayOfLuaValue(this, -1);
+    ns1__BatchJobExResponse->BatchJobExResult = soap_new_ns1__ArrayOfLuaValue(this, -1);
     // Batch jobs are completed synchronously, so there is no need to start the heartbeat
     try
     {
-        CWebService::singleton->batchJob(*ns1__BatchJobEx->job, ns1__BatchJobEx->script, &ns1__BatchJobExResponse.BatchJobExResult->LuaValue, this);
+        CWebService::singleton->batchJob(*ns1__BatchJobEx->job, ns1__BatchJobEx->script, &ns1__BatchJobExResponse->BatchJobExResult->LuaValue, this);
     }
     catch (std::exception&)
     {
@@ -1815,13 +1815,13 @@ int RCCServiceSoapService::BatchJobEx(_ns1__BatchJobEx* ns1__BatchJobEx, _ns1__B
     return 0;
 }
 
-int RCCServiceSoapService::GetExpiration(_ns1__GetExpiration* ns1__GetExpiration, _ns1__GetExpirationResponse& ns1__GetExpirationResponse)
+int RCCServiceSoapService::GetExpiration(_ns1__GetExpiration* ns1__GetExpiration, _ns1__GetExpirationResponse* ns1__GetExpirationResponse)
 {
     BEGIN_PRINT(GetExpiration, "GetExpiration");
 
     try
     {
-        CWebService::singleton->getExpiration(ns1__GetExpiration->jobID, &ns1__GetExpirationResponse.GetExpirationResult);
+        CWebService::singleton->getExpiration(ns1__GetExpiration->jobID, &ns1__GetExpirationResponse->GetExpirationResult);
     }
     catch (std::exception&)
     {
@@ -1834,43 +1834,43 @@ int RCCServiceSoapService::GetExpiration(_ns1__GetExpiration* ns1__GetExpiration
     return 0;
 }
 
-int RCCServiceSoapService::GetAllJobs(_ns1__GetAllJobs* ns1__GetAllJobs, _ns1__GetAllJobsResponse& ns1__GetAllJobsResponse)
+int RCCServiceSoapService::GetAllJobs(_ns1__GetAllJobs* ns1__GetAllJobs, _ns1__GetAllJobsResponse* ns1__GetAllJobsResponse)
 {
     BEGIN_PRINT(GetAllJobs, "GetAllJobs");
 
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    CWebService::singleton->getAllJobs(ns1__GetAllJobsResponse.GetAllJobsResult, this);
+    CWebService::singleton->getAllJobs(ns1__GetAllJobsResponse->GetAllJobsResult, this);
     END_PRINT(GetAllJobs, "GetAllJobs");
     return 0;
 }
 
-int RCCServiceSoapService::GetAllJobsEx(_ns1__GetAllJobsEx* ns1__GetAllJobsEx, _ns1__GetAllJobsExResponse& ns1__GetAllJobsExResponse)
+int RCCServiceSoapService::GetAllJobsEx(_ns1__GetAllJobsEx* ns1__GetAllJobsEx, _ns1__GetAllJobsExResponse* ns1__GetAllJobsExResponse)
 {
     BEGIN_PRINT(GetAllJobsEx, "GetAllJobsEx");
 
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    ns1__GetAllJobsExResponse.GetAllJobsExResult = soap_new_ns1__ArrayOfJob(this, -1);
-    CWebService::singleton->getAllJobs(ns1__GetAllJobsExResponse.GetAllJobsExResult->Job, this);
+    ns1__GetAllJobsExResponse->GetAllJobsExResult = soap_new_ns1__ArrayOfJob(this, -1);
+    CWebService::singleton->getAllJobs(ns1__GetAllJobsExResponse->GetAllJobsExResult->Job, this);
     END_PRINT(GetAllJobsEx, "GetAllJobsEx");
     return 0;
 }
 
-int RCCServiceSoapService::CloseExpiredJobs(_ns1__CloseExpiredJobs* ns1__CloseExpiredJobs, _ns1__CloseExpiredJobsResponse& ns1__CloseExpiredJobsResponse)
+int RCCServiceSoapService::CloseExpiredJobs(_ns1__CloseExpiredJobs* ns1__CloseExpiredJobs, _ns1__CloseExpiredJobsResponse* ns1__CloseExpiredJobsResponse)
 {
     BEGIN_PRINT(GetAllJobs, "CloseExpiredJobs");
 
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    CWebService::singleton->closeExpiredJobs(&ns1__CloseExpiredJobsResponse.CloseExpiredJobsResult);
+    CWebService::singleton->closeExpiredJobs(&ns1__CloseExpiredJobsResponse->CloseExpiredJobsResult);
     END_PRINT(GetAllJobs, "CloseExpiredJobs");
     return 0;
 }
 
-int RCCServiceSoapService::CloseAllJobs(_ns1__CloseAllJobs* ns1__CloseAllJobs, _ns1__CloseAllJobsResponse& ns1__CloseAllJobsResponse)
+int RCCServiceSoapService::CloseAllJobs(_ns1__CloseAllJobs* ns1__CloseAllJobs, _ns1__CloseAllJobsResponse* ns1__CloseAllJobsResponse)
 {
     BEGIN_PRINT(GetAllJobs, "CloseAllJobs");
 
     Aya::Security::Impersonator impersonate(Aya::Security::WebService);
-    CWebService::singleton->closeAllJobs(&ns1__CloseAllJobsResponse.CloseAllJobsResult);
+    CWebService::singleton->closeAllJobs(&ns1__CloseAllJobsResponse->CloseAllJobsResult);
     END_PRINT(GetAllJobs, "CloseAllJobs");
     return 0;
 }

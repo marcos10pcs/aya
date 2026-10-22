@@ -55,10 +55,10 @@ set(SOURCES
   src/util/StreamHelpers.cpp
   src/util/stringbuffer.hpp
   src/util/ublas_ext.hpp
-  src/AyaAssert.cpp
-  src/AyaAssert.hpp
-  src/AyaFormat.cpp
-  src/AyaFormat.hpp
+  src/RbxAssert.cpp
+  src/RbxAssert.hpp
+  src/RbxFormat.cpp
+  src/RbxFormat.hpp
   src/CPUCount.cpp
   src/CPUCount.hpp
   src/FastLog.cpp
