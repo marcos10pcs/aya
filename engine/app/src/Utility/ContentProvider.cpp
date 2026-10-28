@@ -313,7 +313,9 @@ void ContentProvider::verifyScriptSignature(const ProtectedString& source, bool 
     {
         // sig can be behind a Lua comment
         // looks like "--ayasig%MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtfLLFT36v5r9bNP7STBteDU5a%"
-        const char* sigHeader = "--ayasig%";
+        // MercuryCore emits --rbxsig%; retain --ayasig% for existing Aya content.
+        const char* sigHeader = strncmp(script, "--rbxsig%", strlen("--rbxsig%")) == 0
+            ? "--rbxsig%" : "--ayasig%";
         if (strncmp(script, sigHeader, strlen(sigHeader)) == 0)
         {
             const char* sigStart = script + strlen(sigHeader);
