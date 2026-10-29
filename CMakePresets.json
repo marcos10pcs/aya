@@ -65,6 +65,19 @@
       }
     },
     {
+      "name": "x64-windows-player",
+      "inherits": "x64-windows-rel",
+      "binaryDir": "${sourceDir}/build/x64-windows-player",
+      "cacheVariables": {
+        "AYA_PLAYER_ONLY": "ON",
+        "AYA_TEST_BUILD": "OFF",
+        "ENABLE_CHROMIUM_FRAMES": "OFF",
+        "ENABLE_VOICE_CHAT": "OFF",
+        "VCPKG_MANIFEST_DIR": "${sourceDir}/build-support/windows-player",
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      }
+    },
+    {
       "name": "x64-windows-emi",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
@@ -114,6 +127,10 @@
     {
       "name": "x64-windows-rel",
       "configurePreset": "x64-windows-rel"
+    },
+    {
+      "name": "x64-windows-player",
+      "configurePreset": "x64-windows-player"
     },
     {
       "name": "x64-windows-emi",

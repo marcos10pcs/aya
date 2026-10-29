@@ -22,6 +22,7 @@ option(CEF_USE_SANDBOX "Enable CEF sandbox" OFF)
 option(ADDRESS_SANITIZER "Enable address sanitization" OFF)
 option(USE_PRIVATE_RESOURCES "Use private resources" ON)
 option(NO_QT "Don't build Qt targets" OFF)
+option(AYA_PLAYER_ONLY "Configure only the Aya Player and its engine dependencies" OFF)
 set(CEF_VERSION "140.1.14+geb1c06e+chromium-140.0.7339.185" CACHE STRING "CEF version to use (if ChromiumFrames are enabled)")
 
 if(NOT CI)
@@ -38,7 +39,7 @@ if("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "^(arm64|ARM64|aarch64|AARCH64)$")
   set(AYA_ARCH_ARM64 1)
   set(FMOD_ARCHITECTURE arm64)
   add_compile_definitions(AYA_ARCH_ARM64=1)
-elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "^(x86_64|X86_64)$")
+elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "^(x86_64|X86_64|AMD64|amd64)$")
   set(AYA_ARCH_X86 1)
   set(FMOD_ARCHITECTURE x64)
   add_compile_definitions(AYA_ARCH_X86=1)
@@ -67,6 +68,10 @@ endif()
 # ChromiumFrames and related SSE3 options enabled required for rendering optimizations
 if(AYA_OS_ANDROID)
   set(ENABLE_CHROMIUM_FRAMES OFF)
+endif()
+
+if(AYA_PLAYER_ONLY AND (AYA_OS_ANDROID OR NO_QT))
+  message(FATAL_ERROR "AYA_PLAYER_ONLY requires desktop Qt support")
 endif()
 
 if(ENABLE_CHROMIUM_FRAMES)
@@ -240,10 +245,14 @@ if(NOT NO_QT)
 
   # Arch: yay -S qt6-base qt6-webengine
   # Ubuntu: apt install qt6-base-dev qt6-webengine-dev qt6-webengine-dev-tools libqt6webenginecore6-bin
-  find_package(Qt6 COMPONENTS Core Widgets Concurrent WebEngineWidgets Gui Designer Xml REQUIRED)
+  if(AYA_PLAYER_ONLY)
+    find_package(Qt6 COMPONENTS Core Widgets Concurrent WebEngineWidgets Gui Xml REQUIRED)
+  else()
+    find_package(Qt6 COMPONENTS Core Widgets Concurrent WebEngineWidgets Gui Designer Xml REQUIRED)
+  endif()
   
   # QtitanRibbon
-  if(NOT AYA_OS_ANDROID)
+  if(NOT AYA_OS_ANDROID AND NOT AYA_PLAYER_ONLY)
     add_subdirectory(third-party/QtitanRibbon) 
   endif()
 
@@ -285,7 +294,9 @@ add_subdirectory(engine/core)
 add_subdirectory(engine/network)
 add_subdirectory(engine/gfx)
 
-add_subdirectory(client/core-script-compiler)
+if(NOT AYA_PLAYER_ONLY)
+  add_subdirectory(client/core-script-compiler)
+endif()
 
 if(NOT AYA_OS_ANDROID)
   if(NOT NO_QT)
@@ -293,10 +304,14 @@ if(NOT AYA_OS_ANDROID)
       include(${CMAKE_SOURCE_DIR}/client/windeployqt.cmake)
     endif()
 
-    add_subdirectory(client/studio)
+    if(NOT AYA_PLAYER_ONLY)
+      add_subdirectory(client/studio)
+    endif()
     add_subdirectory(client/player)
   endif()
-  add_subdirectory(client/server)
+  if(NOT AYA_PLAYER_ONLY)
+    add_subdirectory(client/server)
+  endif()
 else()
   # add_subdirectory(client/mobile)
 endif()
@@ -305,7 +320,7 @@ if(ENABLE_CHROMIUM_FRAMES AND NOT AYA_OS_MACOS)
   add_subdirectory(client/web-helper)
 endif()
 
-if(AYA_OS_WINDOWS)
+if(AYA_OS_WINDOWS AND NOT AYA_PLAYER_ONLY)
   add_subdirectory(client/thumbnail-handler)
 endif()
 
@@ -365,10 +380,15 @@ endif()
 if(ENABLE_CHROMIUM_FRAMES AND NOT AYA_OS_MACOS AND NOT NO_QT)
   set(CEF_LIBRARIES cefdll_wrapper)
   add_dependencies(Player WebHelper)
-  add_dependencies(Studio WebHelper)
+  if(NOT AYA_PLAYER_ONLY)
+    add_dependencies(Studio WebHelper)
+  endif()
 endif()
 
 if(AYA_TEST_BUILD)
+  if(AYA_PLAYER_ONLY)
+    message(FATAL_ERROR "AYA_TEST_BUILD requires CoreScriptCompiler; disable AYA_PLAYER_ONLY")
+  endif()
   add_dependencies(Player CompileCoreScripts)
 endif()
 
@@ -383,31 +403,47 @@ if(NOT NO_QT)
   )
 
   target_link_libraries(Player ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES} ${CEF_LIBRARIES} ${QT_LIBRARIES} ${DISCORD_RPC_LIBRARY})
-  target_link_libraries(Studio ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES} ${CEF_LIBRARIES} ${QT_LIBRARIES})
+  if(NOT AYA_PLAYER_ONLY)
+    target_link_libraries(Studio ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES} ${CEF_LIBRARIES} ${QT_LIBRARIES})
+  endif()
 
   set_property(INSTALL "$<TARGET_FILE_NAME:Player>"
     PROPERTY CPACK_START_MENU_SHORTCUTS "Aya Player"
   )
 
-  set_property(INSTALL "$<TARGET_FILE_NAME:Studio>"
-    PROPERTY CPACK_START_MENU_SHORTCUTS "Aya Studio"
-  )
+  if(NOT AYA_PLAYER_ONLY)
+    set_property(INSTALL "$<TARGET_FILE_NAME:Studio>"
+      PROPERTY CPACK_START_MENU_SHORTCUTS "Aya Studio"
+    )
+  endif()
 
   if(AYA_OS_WINDOWS)
     windeployqt(Player)
-    windeployqt(Studio)
+    add_custom_command(TARGET Player POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/third-party/fmod/windows/lib/${FMOD_ARCHITECTURE}/fmod.dll"
+        "$<TARGET_FILE_DIR:Player>/fmod.dll"
+      COMMENT "Copying FMOD runtime for Aya Player"
+    )
+    if(NOT AYA_PLAYER_ONLY)
+      windeployqt(Studio)
+    endif()
   endif()
 endif()
 
-target_link_libraries(CoreScriptCompiler ${MSVC_LIBRARIES} ${THIRD_PARTY_LIBRARIES}) # TODO: Lean and mean CoreScriptCompiler soon (only compile LuaVMDummy & dependencies)
-target_link_libraries(Server ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES})
+if(NOT AYA_PLAYER_ONLY)
+  target_link_libraries(CoreScriptCompiler ${MSVC_LIBRARIES} ${THIRD_PARTY_LIBRARIES}) # TODO: Lean and mean CoreScriptCompiler soon (only compile LuaVMDummy & dependencies)
+  target_link_libraries(Server ${THIRD_PARTY_LIBRARIES} ${MSVC_LIBRARIES})
 
-set_property(INSTALL "$<TARGET_FILE_NAME:Server>"
-  PROPERTY CPACK_START_MENU_SHORTCUTS "Aya Server"
-)
+  set_property(INSTALL "$<TARGET_FILE_NAME:Server>"
+    PROPERTY CPACK_START_MENU_SHORTCUTS "Aya Server"
+  )
+endif()
 
 message(NOTICE "")
-message(NOTICE "-- To compile CoreScripts for Player, run target 'CompileCoreScripts'")
+if(NOT AYA_PLAYER_ONLY)
+  message(NOTICE "-- To compile CoreScripts for Player, run target 'CompileCoreScripts'")
+endif()
 message(NOTICE "-- To compile shaders, run target 'CompileShaders'")
 message(NOTICE "-- All build artifacts are available in '${CMAKE_RUNTIME_OUTPUT_DIRECTORY}'")
 message(NOTICE "")

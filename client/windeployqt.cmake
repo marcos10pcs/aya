@@ -7,14 +7,16 @@ get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
 function(windeployqt target)
   if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(_config "--debug")
+    set(_pdb "--pdb")
   else()
     set(_config "--release")
+    set(_pdb "")
   endif()
 
   add_custom_command(TARGET ${target} POST_BUILD
     COMMAND "${_qt_bin_dir}/windeployqt.exe"
         ${_config}
-        --pdb
+        ${_pdb}
         --verbose 0
         "$<TARGET_FILE:${target}>"
     COMMENT "Deploying Qt libraries using windeployqt for compilation target '${target}'..."
