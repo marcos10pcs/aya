@@ -202,6 +202,9 @@ void Application::Initialize(OgreWidget* window)
     QSettings settings;
     std::string url = settings.value("JsHelpers/masterServerUrl").toString().toStdString();
 
+    if (url.empty()) url = "https://clipaai.tech";
+    if (url.back() != '/') url += '/';
+
     Aya::StandardOut::singleton()->printf(Aya::MESSAGE_WARNING, "Hi whats up: %s", url.c_str());
     SetBaseURL(url);
     Aya::ContentProvider::setAssetFolder("content");
@@ -361,6 +364,7 @@ void Application::loadAppSettings()
         ContentProvider::setAssetFolder("content");
 
         valBaseUrl = settings.value("JsHelpers/masterServerUrl").toString().toStdString();
+        if (valBaseUrl.empty()) valBaseUrl = "https://clipaai.tech";
 
         Aya::StandardOut::singleton()->printf(Aya::MESSAGE_WARNING, "Hi whats up: %s", valBaseUrl.c_str());
 

@@ -2,6 +2,7 @@
 #include "InitializationError.hpp"
 #include "FunctionMarshaller.hpp"
 #include "Utility/Statistics.hpp"
+#include "Utility/Http.hpp"
 #include "DataModel/FastLogSettings.hpp"
 #include "Utility/MicrophoneInput.hpp"
 #include "Utility/CefIntegration.hpp"
@@ -10,6 +11,7 @@
 #include <stdlib.h>
 #include <QSurfaceFormat>
 #include <QApplication>
+#include <QSettings>
 #include "Window.hpp"
 
 Aya::Application* appPtr;
@@ -31,7 +33,7 @@ int main(int argc, char** argv)
     QSurfaceFormat::setDefaultFormat(format);
 
     QApplication::setOrganizationName("Aya");
-    QApplication::setOrganizationDomain("kiseki.lol");
+    QApplication::setOrganizationDomain("clipaai.tech");
     QApplication::setApplicationName("Aya");
 
 #ifdef WIN32
@@ -40,6 +42,11 @@ int main(int argc, char** argv)
     QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     QApplication qtApp(argc, argv);
     qtAppPtr = &qtApp;
+
+    QSettings siteSettings;
+    QString configuredSite = siteSettings.value("JsHelpers/masterServerUrl").toString();
+    if (configuredSite.isEmpty() || configuredSite.contains("kiseki.lol", Qt::CaseInsensitive))
+        siteSettings.setValue("JsHelpers/masterServerUrl", "https://clipaai.tech");
 
     Aya::Application app;
     appPtr = &app;
@@ -55,11 +62,20 @@ int main(int argc, char** argv)
         printf("app.parseCommandLine: %s\n", e.what());
     }
 
-    SetBaseURL("https://kiseki.lol/");
+    std::string siteUrl = siteSettings.value("JsHelpers/masterServerUrl").toString().toStdString();
+    if (siteUrl.back() != '/') siteUrl += '/';
+    SetBaseURL(siteUrl);
 
     // need client settings here before we create window
     std::string clientSettingsString;
-    FetchClientSettingsData(CLIENT_APP_SETTINGS_STRING, CLIENT_SETTINGS_API_KEY, &clientSettingsString);
+    try
+    {
+        Aya::Http(siteUrl + "api/clientappsettings/2016").get(clientSettingsString);
+    }
+    catch (const std::exception& e)
+    {
+        fprintf(stderr, "Could not load 2016 client settings: %s\n", e.what());
+    }
     // Apply client settings
     LoadClientSettingsFromString(CLIENT_APP_SETTINGS_STRING, clientSettingsString, &Aya::ClientAppSettings::singleton());
 
